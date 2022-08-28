@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Change base-tag in index.html from / to BlazorGitHubPagesDemo
+      run: sed -i 's/<base href="\/" \/>/<base href="\/Website\/" \/>/g' build/wwwroot/index.html
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
@@ -25,6 +27,7 @@ jobs:
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
         BASE_BRANCH: main # The branch the action should deploy from.
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BRANCH: page # The branch the action should deploy to.
         FOLDER: build/wwwroot # The folder the action should deploy.
         SINGLE_COMMIT: true
