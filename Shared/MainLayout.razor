@@ -1,0 +1,67 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+    <MudAppBar Color="Color.Transparent"
+        Elevation="0">
+        <MudIconButton Color="Color.Inherit"
+            Edge="Edge.Start"
+            Icon="@Icons.Material.Filled.Menu"
+            OnClick="@((e) => DrawerToggle())"/>
+        <MudSpacer/>
+        <MudIconButton Color="Color.Inherit"
+            Icon="@Icons.Custom.Brands.MudBlazor"
+            Link="https://mudblazor.com/"
+            Target="_blank"/>
+        <MudIconButton Color="Color.Inherit"
+            Icon="@Icons.Custom.Brands.GitHub"
+            Link="https://github.com/MudBlazor/MudBlazor/"
+            Target="_blank"/>
+        <MudToggleIconButton @bind-Toggled="ThemeSpecification.DarkMode"
+            Color="Color.Inherit"
+            ToggledColor="Color.Inherit"
+            Icon="@Icons.Filled.LightMode"
+            ToggledIcon="@Icons.Filled.DarkMode"/>
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen"
+        Color="Color.Secondary"
+        Elevation="1">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">Website</MudText>
+        </MudDrawerHeader>
+        <NavMenu/>
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer Class="my-16 pt-16"
+            MaxWidth="MaxWidth.Large">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+<MudThemeProvider @bind-IsDarkMode="@ThemeSpecification.DarkMode"
+    @ref="@ThemeSpecification.Provider"
+    Theme="ThemeSpecification.Theme"/>
+
+
+@code
+{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ThemeSpecification.DetectSystemTheme();
+            StateHasChanged();
+        }
+    }
+
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}

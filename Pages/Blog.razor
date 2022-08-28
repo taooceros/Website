@@ -1,0 +1,65 @@
+﻿@page "/blog"
+@using Website.Models
+@using Markdig
+@using Website.Utility
+@inject HttpClient Http
+@inject IJSRuntime JSRuntime
+
+<MudTextField @bind-Value="EncryptionKey"
+    Label="Key"/>
+
+@foreach (var post in Posts)
+{
+    <MudPaper Elevation="3"
+        Style="margin: 10px; padding: 15px;">
+        @{
+            var content = string.IsNullOrWhiteSpace(EncryptionKey) ? post.Content : 
+                AesHelper.DecryptStringFromBytes_Aes(post.Content, EncryptionKey);
+            var text = Markdown.ToPlainText(content);
+            var maxLength = (int)Math.Floor(Dimension.Width * 0.4);
+            var summary = text.Length > maxLength ? string.Concat(text.AsSpan()[..maxLength], "...") : text;
+
+            void OnClick()
+            {
+                post.DisplayFull = !post.DisplayFull;
+            }
+        }
+        @if (post.DisplayFull)
+        {
+            <MudMarkdown Value="@content"/>
+        }
+        else
+        {
+            <MudText>
+                @summary
+                ...
+            </MudText>
+        }
+        <MudButton OnClick="@OnClick">Expand</MudButton>
+    </MudPaper>
+
+}
+
+@code {
+    List<Post> Posts { get; } = new();
+    private WindowDimension Dimension { get; set; } = null!;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Dimension = await JSRuntime.InvokeAsync<WindowDimension>("getWindowDimensions");
+
+        var links = await Http.GetFromJsonAsync<List<MarkdownLink>>("Blogs/outline.json") ?? new List<MarkdownLink>();
+
+        foreach (var (fileName, filePath) in links)
+        {
+            Posts.Add(new Post(fileName, filePath, await Http.GetStringAsync($"{filePath}")));
+        }
+
+        Posts.Sort((x, y) => String.Compare(x.FilePath, y.FilePath, StringComparison.Ordinal));
+
+        await base.OnInitializedAsync();
+
+    }
+    public string EncryptionKey { get; set; } = "";
+}
