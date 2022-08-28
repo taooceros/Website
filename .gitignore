@@ -1,0 +1,5 @@
+﻿bin/
+*.md
+.idea/
+.vs/
+obj/
