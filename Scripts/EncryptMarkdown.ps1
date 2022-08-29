@@ -58,6 +58,6 @@ foreach($file in $files) {
     $content = Get-Content $file -Encoding UTF8 -Raw
     $encryptedContent = Encrypt-String $key $content
     $encryptedContent | Out-File -Path "$file.encrypted" -Encoding UTF8
-#    Decrypt-String $key $encryptedContent | Write-Output
+   Decrypt-String $key $encryptedContent | Write-Output
 #    Remove-Item $file
 }
