@@ -3,7 +3,9 @@
 @using Markdig
 @using Website.Utility
 @inject HttpClient Http
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime JsRuntime
+
+<PageTitle>Blog</PageTitle>
 
 <MudTextField @bind-Value="EncryptionKey"
     Label="Key"/>
@@ -26,7 +28,7 @@
         }
         @if (post.DisplayFull)
         {
-            <MudMarkdown Value="@content"/>
+            @((MarkupString)Markdown.ToHtml(content))
         }
         else
         {
@@ -47,7 +49,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Dimension = await JSRuntime.InvokeAsync<WindowDimension>("getWindowDimensions");
+        Dimension = await JsRuntime.InvokeAsync<WindowDimension>("getWindowDimensions");
 
         var links = await Http.GetFromJsonAsync<List<MarkdownLink>>("Blogs/outline.json") ?? new List<MarkdownLink>();
 
