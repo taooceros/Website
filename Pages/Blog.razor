@@ -2,21 +2,36 @@
 @using Website.Models
 @using Markdig
 @using Website.Utility
+@using System.Security.Cryptography
 @inject HttpClient Http
 @inject IJSRuntime JsRuntime
+@inject MarkdownPipeline MarkdownPipeline
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
 <PageTitle>Blog</PageTitle>
 
-<MudTextField @bind-Value="EncryptionKey"
-    Label="Key"/>
-
+<MudStack Row="true">
+    <MudTextField @bind-Value="EncryptionKey"
+        Label="Key"
+        FullWidth="true"
+        InputType="InputType.Password"/>
+    <MudButton OnClick="SaveEncryptionKey">Save</MudButton>
+</MudStack>
 @foreach (var post in Posts)
 {
     <MudPaper Elevation="3"
         Style="margin: 10px; padding: 15px;">
         @{
-            var content = string.IsNullOrWhiteSpace(EncryptionKey) ? post.Content : 
-                AesHelper.DecryptStringFromBytes_Aes(post.Content, EncryptionKey);
+            string content;
+            try
+            {
+                content = string.IsNullOrWhiteSpace(EncryptionKey) ? post.Content :
+                    AesHelper.DecryptStringFromBytes_Aes(post.Content, EncryptionKey);
+            }
+            catch (ArgumentException)
+            {
+                content = post.Content;
+            }
             var text = Markdown.ToPlainText(content);
             var maxLength = (int)Math.Floor(Dimension.Width * 0.4);
             var summary = text.Length > maxLength ? string.Concat(text.AsSpan()[..maxLength], "...") : text;
@@ -28,7 +43,7 @@
         }
         @if (post.DisplayFull)
         {
-            @((MarkupString)Markdown.ToHtml(content))
+            @((MarkupString)Markdown.ToHtml(content, MarkdownPipeline))
         }
         else
         {
@@ -49,6 +64,12 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (await LocalStorage.ContainKeyAsync("EncryptionKey"))
+        {
+            EncryptionKey = await LocalStorage.GetItemAsync<string>("EncryptionKey");
+        }
+
+
         Dimension = await JsRuntime.InvokeAsync<WindowDimension>("getWindowDimensions");
 
         var links = await Http.GetFromJsonAsync<List<MarkdownLink>>("Blogs/outline.json") ?? new List<MarkdownLink>();
@@ -58,10 +79,15 @@
             Posts.Add(new Post(fileName, filePath, await Http.GetStringAsync($"{filePath}")));
         }
 
-        Posts.Sort((x, y) => String.Compare(x.FilePath, y.FilePath, StringComparison.Ordinal));
+        Posts.Sort((x, y) => -string.Compare(x.FilePath, y.FilePath, StringComparison.Ordinal));
 
         await base.OnInitializedAsync();
 
     }
-    public string EncryptionKey { get; set; } = "";
+    private string EncryptionKey { get; set; } = "";
+    
+    public async Task SaveEncryptionKey()
+    {
+        await LocalStorage.SetItemAsync("EncryptionKey", EncryptionKey);
+    }
 }

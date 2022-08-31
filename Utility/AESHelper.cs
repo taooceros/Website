@@ -22,7 +22,7 @@ public class AesHelper
         aesAlg.KeySize = 256;
         aesAlg.Padding = PaddingMode.Zeros;
         aesAlg.Mode = CipherMode.CBC;
-        
+
         aesAlg.Key = Convert.FromBase64String(key);
 
         if (iv is not null)
@@ -49,31 +49,38 @@ public class AesHelper
             throw new ArgumentNullException(nameof(Key));
         // Declare the string used to hold
         // the decrypted text.
+        try
+        {
+            // Create an Aes object
+            // with the specified key and IV.
+            using var aesAlg = Create();
 
-        // Create an Aes object
-        // with the specified key and IV.
-        using var aesAlg = Create();
-        
-        aesAlg.BlockSize = 128;
-        aesAlg.KeySize = 256;
-        aesAlg.Padding = PaddingMode.Zeros;
-        aesAlg.Mode = CipherMode.CBC;
-        
-        var cipherByte = Convert.FromBase64String(cipherText);
-        aesAlg.Key = Convert.FromBase64String(Key);
-        IV ??= cipherByte[..16];
+            aesAlg.BlockSize = 128;
+            aesAlg.KeySize = 256;
+            aesAlg.Padding = PaddingMode.Zeros;
+            aesAlg.Mode = CipherMode.CBC;
 
-        aesAlg.IV = IV;
+            var cipherByte = Convert.FromBase64String(cipherText);
+            aesAlg.Key = Convert.FromBase64String(Key);
+            IV ??= cipherByte[..16];
 
-        // Create a decryptor to perform the stream transform.
-        var decryptor = aesAlg.CreateDecryptor();
+            aesAlg.IV = IV;
 
-        var unencryptedData = decryptor.TransformFinalBlock(cipherByte, 16, cipherByte.Length - 16);
+            // Create a decryptor to perform the stream transform.
+            var decryptor = aesAlg.CreateDecryptor();
 
-        // Read the decrypted bytes from the decrypting stream
-        // and place them in a string.
-        var plaintext = Encoding.UTF8.GetString(unencryptedData).Trim('\0');
+            var unencryptedData = decryptor.TransformFinalBlock(cipherByte, 16, cipherByte.Length - 16);
 
-        return plaintext;
+            // Read the decrypted bytes from the decrypting stream
+            // and place them in a string.
+            var plaintext = Encoding.UTF8.GetString(unencryptedData).Trim('\0');
+            return plaintext;
+
+
+        }
+        catch (Exception e) when (e is CryptographicException or FormatException)
+        {
+            throw new ArgumentException($"Invalid Key {nameof(Key)}");
+        }
     }
 }
