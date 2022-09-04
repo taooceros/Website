@@ -13,17 +13,13 @@
             OnClick="@((e) => DrawerToggle())"/>
         <MudSpacer/>
         <MudIconButton Color="Color.Inherit"
-            Icon="@Icons.Custom.Brands.MudBlazor"
-            Link="https://mudblazor.com/"
-            Target="_blank"/>
-        <MudIconButton Color="Color.Inherit"
             Icon="@Icons.Custom.Brands.GitHub"
-            Link="https://github.com/MudBlazor/MudBlazor/"
+            Link="https://github.com/taooceros/"
             Target="_blank"/>
         <MudToggleIconButton @bind-Toggled="ThemeSpecification.DarkMode"
             Color="Color.Inherit"
-            ToggledColor="Color.Inherit"
             Icon="@Icons.Filled.LightMode"
+            ToggledColor="Color.Inherit"
             ToggledIcon="@Icons.Filled.DarkMode"/>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen"
@@ -58,7 +54,7 @@
         }
     }
 
-    bool _drawerOpen = true;
+    bool _drawerOpen = false;
 
     void DrawerToggle()
     {

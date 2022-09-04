@@ -4,18 +4,29 @@
 <PageTitle>Kevin Zhang</PageTitle>
 
 <MudText Typo="Typo.h3">
-    <Typewriter Builder="@Builder"></Typewriter >
+    <Typewriter Builder="@Builder"/>
 </MudText>
 
-<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor!</MudText>
-<MudAlert Severity="Severity.Normal">
-    You can find documentation and examples on our website here:
-    <MudLink Color="Color.Inherit"
-        Href="https://mudblazor.com"
-        Typo="Typo.body2">
-        <b>www.mudblazor.com</b>
-    </MudLink>
-</MudAlert>
+
+<MudAppBar Bottom="true"
+    Color="Color.Transparent"
+    Elevation="0">
+    <MudStack AlignItems="AlignItems.Center"
+        Class="flex-grow-1"
+        Justify="Justify.Center"
+        Row="true"
+        Spacing="2">
+        <MudIcon Icon="@Icons.Outlined.Label"
+            Style="margin: 15px"/>
+        Power by .Net 7 Blazor and MudBlazor
+        <MudIconButton Color="Color.Inherit"
+            Icon="@Icons.Custom.Brands.MudBlazor"
+            Link="https://mudblazor.com/"
+            Style="margin:0"
+            Target="_blank"/>
+    </MudStack>
+</MudAppBar>
+
 
 @code{
     TypewriterBuilder Builder = new TypewriterBuilder(defaultCharacterPause: 50)
