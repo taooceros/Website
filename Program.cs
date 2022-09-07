@@ -17,7 +17,10 @@ builder.Services.AddScoped(_ => new HttpClient
         BaseAddress = new Uri(builder.HostEnvironment.BaseAddress),
         DefaultRequestVersion = HttpVersion.Version20,
         DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrLower
-    }).AddSingleton(_ => new MarkdownPipelineBuilder().UseTaskLists().Build())
+    }).AddSingleton(_ => new MarkdownPipelineBuilder()
+        .UseTaskLists()
+        .UseEmphasisExtras()
+        .Build())
     .AddMudServices()
     .AddMudMarkdownServices()
     .AddBlazoredLocalStorageAsSingleton();;
