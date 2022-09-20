@@ -23,8 +23,8 @@ jobs:
         dotnet-version: 7.0.100-preview.7.22377.5 
     - name: Publish with dotnet
       run: dotnet publish --configuration Release --output release
-    - name: Change base-tag in index.html from / to BlazorGitHubPagesDemo
-      run: sed -i 's/<base href="\/" \/>/<base href="\/Website\/" \/>/g' release/wwwroot/index.html
+    # - name: Change base-tag in index.html from / to BlazorGitHubPagesDemo
+    #   run: sed -i 's/<base href="\/" \/>/<base href="\/Website\/" \/>/g' release/wwwroot/index.html
     - name: Add .nojekyll file
       run: touch release/wwwroot/.nojekyll
     - name: Deploy to Github Pages
