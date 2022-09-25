@@ -12,55 +12,74 @@
 
 <MudStack Row="true">
     <MudTextField @bind-Value="EncryptionKey"
-        Label="Key"
         FullWidth="true"
-        InputType="InputType.Password"/>
+        InputType="InputType.Password"
+        Label="Key"/>
     <MudButton OnClick="SaveEncryptionKey">Save</MudButton>
 </MudStack>
-@foreach (var post in Posts)
-{
-    <MudPaper Elevation="3"
-        Style="margin: 10px; padding: 15px;">
-        @{
-            string content;
-            try
-            {
-                content = string.IsNullOrWhiteSpace(EncryptionKey) ? post.Content :
-                    AesHelper.DecryptStringFromBytes_Aes(post.Content, EncryptionKey);
-            }
-            catch (ArgumentException)
-            {
-                content = post.Content;
-            }
-            var text = Markdown.ToPlainText(content);
-            var maxLength = (int)Math.Floor(Dimension.Width * 0.4);
-            var summary = text.Length > maxLength ? string.Concat(text.AsSpan()[..maxLength], "...") : text;
 
-            void OnClick()
-            {
-                post.DisplayFull = !post.DisplayFull;
+@if (_numberOfPages > 0)
+{
+    @foreach (var post in DisplayContent[_page - 1])
+    {
+        <MudPaper Elevation="3"
+            Style="margin: 10px; padding: 15px;">
+            @{
+                string content;
+                try
+                {
+                    content = string.IsNullOrWhiteSpace(EncryptionKey) ? post.Content :
+                        AesHelper.DecryptStringFromBytes_Aes(post.Content, EncryptionKey);
+                }
+                catch (ArgumentException)
+                {
+                    content = post.Content;
+                }
+                var text = Markdown.ToPlainText(content);
+                var maxLength = (int)Math.Floor(Dimension.Width * 0.4);
+                var summary = text.Length > maxLength ? string.Concat(text.AsSpan()[..maxLength], "...") : text;
+
+                void OnClick()
+                {
+                    post.DisplayFull = !post.DisplayFull;
+                }
             }
-        }
-        @if (post.DisplayFull)
-        {
-            @((MarkupString)Markdown.ToHtml(content, MarkdownPipeline))
-        }
-        else
-        {
-            <MudText>
-                @summary
-                ...
-            </MudText>
-        }
-        <MudButton OnClick="@OnClick">Expand</MudButton>
-    </MudPaper>
+            @if (post.DisplayFull)
+            {
+                @((MarkupString)Markdown.ToHtml(content, MarkdownPipeline))
+            }
+            else
+            {
+                <MudText>
+                    @summary
+                    ...
+                </MudText>
+            }
+            <MudButton OnClick="@OnClick">Expand</MudButton>
+        </MudPaper>
+    }
+
+    <div class="d-flex justify-center">
+        <MudPagination Count="_numberOfPages"
+            SelectedChanged="OnPageSelectionChanged"/>
+    </div>
 
 }
 
 @code {
-    List<Post> Posts { get; } = new();
+    List<MarkdownLink> Links { get; set; } = new();
     private WindowDimension Dimension { get; set; } = null!;
 
+    private List<Post>[] DisplayContent { get; set; } = {
+        new()
+    };
+
+    private bool[] PageInitialized { get; set; }
+    
+    const int MaxPostPerPage = 4;
+    
+    int _numberOfPages;
+    int _page = 1;
 
     protected override async Task OnInitializedAsync()
     {
@@ -69,25 +88,56 @@
             EncryptionKey = await LocalStorage.GetItemAsync<string>("EncryptionKey");
         }
 
-
         Dimension = await JsRuntime.InvokeAsync<WindowDimension>("getWindowDimensions");
 
-        var links = await Http.GetFromJsonAsync<List<MarkdownLink>>("Blogs/outline.json") ?? new List<MarkdownLink>();
+        Links = await Http.GetFromJsonAsync<List<MarkdownLink>>("Blogs/outline.json") ?? new List<MarkdownLink>();
 
-        foreach (var (fileName, filePath) in links)
+        _numberOfPages = (int)Math.Ceiling((double)Links.Count / MaxPostPerPage);
+
+        DisplayContent = new List<Post>[_numberOfPages];
+        PageInitialized = new bool[_numberOfPages];
+
+        Links.Sort((x, y) => -string.Compare(x.FilePath, y.FilePath, StringComparison.Ordinal));
+
+        for (var i = 0; i < DisplayContent.Length; i++)
         {
-            Posts.Add(new Post(fileName, filePath, await Http.GetStringAsync($"{filePath}")));
+            DisplayContent[i] = new List<Post>();
         }
 
-        Posts.Sort((x, y) => -string.Compare(x.FilePath, y.FilePath, StringComparison.Ordinal));
+        PageInitialized[0] = true;
+        
+        foreach (var link in Links.Take(MaxPostPerPage))
+        {
+            var raw = await Http.GetStringAsync(link.FilePath);
+            DisplayContent[0].Add(new Post(link.FilePath, link.FileName, raw));
+        }
 
         await base.OnInitializedAsync();
 
     }
     private string EncryptionKey { get; set; } = "";
-    
+
     public async Task SaveEncryptionKey()
     {
         await LocalStorage.SetItemAsync("EncryptionKey", EncryptionKey);
+    }
+    private async Task OnPageSelectionChanged(int page)
+    {
+        var i = page - 1;
+        if (PageInitialized[i])
+        {
+            _page = page;
+            return;
+        }
+        PageInitialized[i] = true;
+        
+        DisplayContent[i] = new List<Post>();
+        foreach (var link in Links.Skip(MaxPostPerPage * i).Take(MaxPostPerPage))
+        {
+            var raw = await Http.GetStringAsync(link.FilePath);
+            DisplayContent[i].Add(new Post(link.FilePath, link.FileName, raw));
+        }
+
+        _page = page;
     }
 }
