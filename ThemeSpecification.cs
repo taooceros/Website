@@ -6,12 +6,12 @@ public static class ThemeSpecification
 {
     public static async Task DetectSystemTheme()
     {
-        DarkMode = await Provider.GetSystemPreference();
+        DarkMode = await (Provider?.GetSystemPreference() ?? Task.FromResult(false));
     }
 
     public static bool DarkMode { get; set; }
 
-    public static MudThemeProvider Provider { get; set; } = default!;
+    public static MudThemeProvider? Provider { get; set; } = default!;
 
     public static readonly MudTheme Theme = new()
     {
