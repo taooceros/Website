@@ -143,6 +143,7 @@
 
     private async Task KeyChanged(string arg)
     {
+        EncryptionKey = arg;
         await UpdateDecryptedText();
     }
 
@@ -156,7 +157,7 @@
             }
             catch
             {
-                break;
+                post.DecryptedContent = "";
             }
         }
     }
