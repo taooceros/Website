@@ -14,6 +14,7 @@
         InputType="InputType.Password"
         Label="Key"
         T="string"
+        Text="@EncryptionKey"
         TextChanged="KeyChanged"/>
     <MudButton OnClick="SaveEncryptionKey">Save</MudButton>
 </MudStack>
@@ -106,7 +107,9 @@
             var raw = await Http.GetStringAsync(link.FilePath);
             DisplayContent[0].Add(new Post(link.FilePath, link.FileName, raw));
         }
-
+        
+        await UpdateDecryptedText();
+        
         await base.OnInitializedAsync();
 
     }
@@ -131,15 +134,30 @@
             var raw = await Http.GetStringAsync(link.FilePath);
             DisplayContent[i].Add(new Post(link.FilePath, link.FileName, raw));
         }
-
+        
         _page = page;
+
+        await UpdateDecryptedText();
+
     }
 
     private async Task KeyChanged(string arg)
     {
+        await UpdateDecryptedText();
+    }
+
+    private async Task UpdateDecryptedText()
+    {
         foreach (var post in DisplayContent[_page - 1])
         {
-            post.DecryptedContent = await AesHelper.SubtleCryptoDecryptAsync(JsRuntime, arg, post.Content);
+            try
+            {
+                post.DecryptedContent = await AesHelper.SubtleCryptoDecryptAsync(JsRuntime, EncryptionKey, post.Content);
+            }
+            catch
+            {
+                break;
+            }
         }
     }
 }
