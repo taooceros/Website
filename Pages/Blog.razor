@@ -42,7 +42,9 @@
             }
             @if (post.DisplayFull)
             {
-                @((MarkupString)Markdown.ToHtml(content, MarkdownPipeline))
+                <MudText>
+                    @((MarkupString)Markdown.ToHtml(content, MarkdownPipeline))
+                </MudText>
             }
             else
             {
