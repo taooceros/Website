@@ -3,4 +3,5 @@
 public record Post(string FileName, string FilePath, string Content)
 {
     public bool DisplayFull { get; set; }
+    public string DecryptedContent { get; set; } = "";
 }

@@ -1,8 +1,7 @@
 ﻿function Create-AesManagedObject($key, $IV)
 {
-    $aesManaged = [System.Security.Cryptography.AesManaged]::Create();
+    $aesManaged = [System.Security.Cryptography.Aes]::Create();
     $aesManaged.Mode = [System.Security.Cryptography.CipherMode]::CBC
-    $aesManaged.Padding = [System.Security.Cryptography.PaddingMode]::Zeros
     $aesManaged.BlockSize = 128
     $aesManaged.KeySize = 256
     if ($IV)

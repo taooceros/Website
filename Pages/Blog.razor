@@ -2,7 +2,6 @@
 @using Website.Models
 @using Markdig
 @using Website.Utility
-@using System.Security.Cryptography
 @inject HttpClient Http
 @inject IJSRuntime JsRuntime
 @inject MarkdownPipeline MarkdownPipeline
@@ -11,7 +10,11 @@
 <PageTitle>Blog</PageTitle>
 
 <MudStack Row="true">
-    <MudTextField @bind-Value="EncryptionKey" FullWidth="true" InputType="InputType.Password" Label="Key" />
+    <MudTextField FullWidth="true"
+        InputType="InputType.Password"
+        Label="Key"
+        T="string"
+        TextChanged="KeyChanged"/>
     <MudButton OnClick="SaveEncryptionKey">Save</MudButton>
 </MudStack>
 
@@ -19,18 +22,10 @@
 {
     @foreach (var post in DisplayContent[_page - 1])
     {
-        <MudPaper Elevation="3" Style="margin: 10px; padding: 15px;">
+        <MudPaper Elevation="3"
+            Style="margin: 10px; padding: 15px;">
             @{
-                string content;
-                try
-                {
-                    content = string.IsNullOrWhiteSpace(EncryptionKey) ? post.Content :
-                    AesHelper.DecryptStringFromBytes_Aes(post.Content, EncryptionKey);
-                }
-                catch (ArgumentException)
-                {
-                    content = post.Content;
-                }
+                var content = post.DecryptedContent;
                 var text = Markdown.ToPlainText(content);
                 var maxLength = (int)Math.Floor(Dimension.Width * 0.4);
                 var summary = text.Length > maxLength ? string.Concat(text.AsSpan()[..maxLength], "...") : text;
@@ -58,7 +53,8 @@
     }
 
     <div class="d-flex justify-center">
-        <MudPagination Count="_numberOfPages" SelectedChanged="OnPageSelectionChanged" />
+        <MudPagination Count="_numberOfPages"
+            SelectedChanged="OnPageSelectionChanged"/>
     </div>
 
 }
@@ -68,15 +64,17 @@
     private WindowDimension Dimension { get; set; } = null!;
 
     private List<Post>[] DisplayContent { get; set; } = {
-new()
-};
+        new()
+    };
 
     private bool[] PageInitialized { get; set; } = Array.Empty<bool>();
 
-    const int MaxPostPerPage = 4;
+        const int MaxPostPerPage = 4;
 
     int _numberOfPages;
     int _page = 1;
+
+    private string EncryptionKey { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -112,7 +110,6 @@ new()
         await base.OnInitializedAsync();
 
     }
-    private string EncryptionKey { get; set; } = "";
 
     public async Task SaveEncryptionKey()
     {
@@ -136,5 +133,13 @@ new()
         }
 
         _page = page;
+    }
+
+    private async Task KeyChanged(string arg)
+    {
+        foreach (var post in DisplayContent[_page - 1])
+        {
+            post.DecryptedContent = await AesHelper.SubtleCryptoDecryptAsync(JsRuntime, arg, post.Content);
+        }
     }
 }

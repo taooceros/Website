@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using Website;
 using MudBlazor.Services;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -23,6 +22,6 @@ builder.Services.AddScoped(_ => new HttpClient
         .Build())
     .AddMudServices()
     .AddMudMarkdownServices()
-    .AddBlazoredLocalStorageAsSingleton();;
+    .AddBlazoredLocalStorageAsSingleton();
 
 await builder.Build().RunAsync();
