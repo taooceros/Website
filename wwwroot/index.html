@@ -68,10 +68,6 @@
     window["decryptAsync"] = async function (buf, rawKey) {
         var parts = separateIvFromData(buf);
 
-        console.log(rawKey.buffer)
-        console.log(buf)
-        console.log(parts.iv)
-        
         var key = await crypto.subtle.importKey(
             'raw'
             , rawKey.buffer
