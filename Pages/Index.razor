@@ -1,10 +1,10 @@
 ﻿@page "/"
 @using BlazorTypewriter
 
-<PageTitle>Kevin Zhang</PageTitle>
+<PageTitle>Hongtao Zhang</PageTitle>
 
 <MudText Typo="Typo.h3">
-    <Typewriter Builder="@Builder"/>
+    <Typewriter Builder="@_builder"/>
 </MudText>
 
 
@@ -29,11 +29,11 @@
 
 
 @code{
-    TypewriterBuilder Builder = new TypewriterBuilder(defaultCharacterPause: 50)
+    readonly TypewriterBuilder _builder = new TypewriterBuilder(defaultCharacterPause: 50)
         .TypeString("Hello, There!")
         .Pause(1000)
         .DeleteAll()
-        .TypeString("Here's Kevin Zhang!")
+        .TypeString("Here's Hongtao (Kevin) Zhang!")
         .Pause(2000)
         .DeleteAll()
         .TypeString("Welcome to my website!");
