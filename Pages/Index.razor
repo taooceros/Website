@@ -4,40 +4,29 @@
 <PageTitle>Hongtao Zhang</PageTitle>
 
 <MudText Typo="Typo.h3">
-    <Typewriter Builder="@_builder"/>
+    <Typewriter Builder="@_builder" />
+    <a href="https://www.flowlauncher.com/">
+        <AnimationState Delay="12000" AnimationType="fade-in">
+            <MudImage Src="https://www.flowlauncher.com/public/images/titlelogo.png" style="margin:auto" />
+        </AnimationState>
+    </a>
 </MudText>
 
-<AnimationState AnimationTime="5s"
-    AnimationType="fade-in"
-    Delay="10000"
-    IsShown="true">
-    <MudStack Row="true">
-        <MudIcon ></MudIcon>
-        Flow Launcher
-    </MudStack>
+<AnimationState AnimationTime="5s" AnimationType="fade-in" Delay="13000" IsShown="true">
+
 </AnimationState>
 
-<MudAppBar Bottom="true"
-    Color="Color.Transparent"
-    Elevation="0">
-    <MudStack AlignItems="AlignItems.Center"
-        Class="flex-grow-1"
-        Justify="Justify.Center"
-        Row="true"
-        Spacing="2">
-        <MudIcon Icon="@Icons.Outlined.Label"
-            Style="margin: 15px"/>
+<MudAppBar Bottom="true" Color="Color.Transparent" Elevation="0">
+    <MudStack AlignItems="AlignItems.Center" Class="flex-grow-1" Justify="Justify.Center" Row="true" Spacing="2">
+        <MudIcon Icon="@Icons.Outlined.Label" Style="margin: 15px" />
         Power by .Net 7 Blazor and MudBlazor
-        <MudIconButton Color="Color.Inherit"
-            Icon="@Icons.Custom.Brands.MudBlazor"
-            Link="https://mudblazor.com/"
-            Style="margin:0"
-            Target="_blank"/>
+        <MudIconButton Color="Color.Inherit" Icon="@Icons.Custom.Brands.MudBlazor" Link="https://mudblazor.com/"
+            Style="margin:0" Target="_blank" />
     </MudStack>
 </MudAppBar>
 
 
-@code{
+@code {
     readonly TypewriterBuilder _builder = new TypewriterBuilder(defaultCharacterPause: 50)
         .TypeString("Hello, There!")
         .Pause(1000)
@@ -46,7 +35,7 @@
         .Pause(2000)
         .DeleteAll()
         .TypeString("Welcome to my website!\n")
-        .Pause(2000)
-        .TypeString("I am also maintainer of Flow Launcher, Check it out?");
+        .Pause(300)
+        .TypeString("I am also a maintainer of Flow Launcher, Check it out?");
 
 }

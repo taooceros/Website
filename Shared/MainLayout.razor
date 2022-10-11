@@ -1,45 +1,33 @@
 ﻿@inherits LayoutComponentBase
 
-<MudDialogProvider/>
-<MudSnackbarProvider/>
+<MudDialogProvider />
+<MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Color="Color.Transparent"
-        Elevation="0">
-        <MudIconButton Color="Color.Inherit"
-            Edge="Edge.Start"
-            Icon="@Icons.Material.Filled.Menu"
-            OnClick="@((e) => DrawerToggle())"/>
-        <MudSpacer/>
-        <MudIconButton Color="Color.Inherit"
-            Icon="@Icons.Custom.Brands.GitHub"
-            Link="https://github.com/taooceros/"
-            Target="_blank"/>
-        <MudToggleIconButton @bind-Toggled="ThemeSpecification.DarkMode"
-            Color="Color.Inherit"
-            Icon="@Icons.Filled.LightMode"
-            ToggledColor="Color.Inherit"
-            ToggledIcon="@Icons.Filled.DarkMode"/>
+    <MudAppBar Color="Color.Transparent" Elevation="0">
+        <MudIconButton Color="Color.Inherit" Edge="Edge.Start" Icon="@Icons.Material.Filled.Menu"
+            OnClick="@((e) => DrawerToggle())" />
+        <MudSpacer />
+        <MudToggleIconButton @bind-Toggled="ThemeSpecification.DarkMode" Color="Color.Inherit"
+            Icon="@Icons.Filled.LightMode" ToggledColor="Color.Inherit" ToggledIcon="@Icons.Filled.DarkMode" />
+        <MudIconButton Color="Color.Inherit" Icon="@Icons.Custom.Brands.GitHub" Link="https://github.com/taooceros/"
+            Target="_blank" />
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen"
-        Color="Color.Secondary"
-        Elevation="1">
+    <MudDrawer @bind-Open="_drawerOpen" Color="Color.Secondary" Elevation="1">
         <MudDrawerHeader>
             <MudText Typo="Typo.h6">Website</MudText>
         </MudDrawerHeader>
-        <NavMenu/>
+        <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        <MudContainer Class="my-16 pt-16"
-            MaxWidth="MaxWidth.Large">
+        <MudContainer Class="my-16 pt-16" MaxWidth="MaxWidth.Large">
             @Body
         </MudContainer>
     </MudMainContent>
 </MudLayout>
 
-<MudThemeProvider @bind-IsDarkMode="@ThemeSpecification.DarkMode"
-    @ref="@ThemeSpecification.Provider"
-    Theme="ThemeSpecification.Theme"/>
+<MudThemeProvider @bind-IsDarkMode="@ThemeSpecification.DarkMode" @ref="@ThemeSpecification.Provider"
+    Theme="ThemeSpecification.Theme" />
 
 
 @code
