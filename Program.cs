@@ -2,7 +2,6 @@ using Blazored.LocalStorage;
 using Markdig;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using MudBlazor;
 using Website;
 using MudBlazor.Services;
 using System.Net;
@@ -21,7 +20,6 @@ builder.Services.AddScoped(_ => new HttpClient
         .UseEmphasisExtras()
         .Build())
     .AddMudServices()
-    .AddMudMarkdownServices()
     .AddBlazoredLocalStorageAsSingleton();
 
 await builder.Build().RunAsync();

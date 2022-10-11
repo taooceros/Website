@@ -7,6 +7,15 @@
     <Typewriter Builder="@_builder"/>
 </MudText>
 
+<AnimationState AnimationTime="5s"
+    AnimationType="fade-in"
+    Delay="10000"
+    IsShown="true">
+    <MudStack Row="true">
+        <MudIcon ></MudIcon>
+        Flow Launcher
+    </MudStack>
+</AnimationState>
 
 <MudAppBar Bottom="true"
     Color="Color.Transparent"
@@ -36,6 +45,8 @@
         .TypeString("Here's Hongtao (Kevin) Zhang!")
         .Pause(2000)
         .DeleteAll()
-        .TypeString("Welcome to my website!");
+        .TypeString("Welcome to my website!\n")
+        .Pause(2000)
+        .TypeString("I am also maintainer of Flow Launcher, Check it out?");
 
 }
