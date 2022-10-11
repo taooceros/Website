@@ -1,0 +1,77 @@
+﻿<div class="@animationType">
+    @ChildContent
+</div>
+
+
+<style>
+    .fade-in{
+        animation:fade-in @AnimationTime;
+    }
+    
+    .fade-out{
+        animation: fade-out @AnimationTime linear forwards;
+    }
+    
+    .spin-in{
+        animation: spin @AnimationTime linear forwards;
+    }
+    
+    .hide{
+        width: 0px;
+        height: 0px;
+        opacity: 0;
+    }
+    
+    @@keyframes fade-in{
+        0%{
+            opacity:0;
+        }
+        100%{
+            opacity:1;
+        }
+    }
+    
+    
+    @@keyframes fade-out {
+         0%   {opacity:1;}
+         99%  {width:@width; height:@height;}
+         100% {width:0px;height:0px; opacity:0;}
+     }
+    
+    @@keyframes spin {
+         0%   {width:0px;height:0px; transform: rotate(0deg);}
+         99%  {width:@width; height:@height;}
+         100% {width:@width;height:@height;transform: rotate(1440deg);}
+     }
+</style>
+
+@code {
+    string width = "100px";
+    string height = "20px";
+
+    [Parameter]
+    public string Name { get; set; }
+    [Parameter]
+    public string AnimationTime { get; set; }
+    [Parameter]
+    public bool IsShown { get; set; }
+
+    private string animationType = "fade-in";
+
+    [Parameter]
+    public int Delay { get; set; }
+
+    [Parameter]
+    public string AnimationType { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        animationType = "hide";
+        await Task.Delay(Delay);
+        animationType = AnimationType;
+    }
+}
