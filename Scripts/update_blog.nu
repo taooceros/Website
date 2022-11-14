@@ -33,7 +33,8 @@ def get_modified [] {
     let newcache = ($files | par-each {|it| {path: $it, hash:(open $it | hash md5)}} | transpose -rid)
     $newcache | save $cache_path
 
-    let $modified = ($files | each while { |it| 
+
+    let $modified = ($files | each { |it| 
         let $path = $it
         let $hash = ($path | open | hash md5)
         let $oldhash = ($cache | get $path)
@@ -51,6 +52,8 @@ def main [key_base64: string] {
 
     let modified = ($files | get_modified)
 
+    echo $modified
+
     $modified | par-each { |file|
        let content = (open $file)
        let enc_content = ($content 
@@ -61,5 +64,8 @@ def main [key_base64: string] {
     let encrypted_files = (ls wwwroot\Blogs\**\*.md.encrypted | get name)
 
     generate_outline $encrypted_files
+
+    git add --all
+    git commit -m $"Blog Update $(date)"
 }
 
