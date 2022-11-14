@@ -13,7 +13,9 @@ public class AesHelper
     {
         var keyBytes = Convert.FromBase64String(key);
         var cipherBytes = Convert.FromBase64String(cipherText);
-        var decrypted = await jsRuntime.InvokeAsync<byte[]>("decryptAsync", cipherBytes, keyBytes);
-        return Encoding.UTF8.GetString(decrypted);
+        var iv = new Byte[16];
+        var decrypted = await jsRuntime.InvokeAsync<byte[]>("decryptAsync", cipherBytes, keyBytes, iv);
+        var decryptedText = Convert.FromBase64CharArray(decrypted.Select(b => (char)b).ToArray(), 0, decrypted.Length);
+        return Encoding.UTF8.GetString(decryptedText);
     }
 }

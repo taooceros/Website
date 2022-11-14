@@ -65,8 +65,7 @@
         );
     }
 
-    window["decryptAsync"] = async function (buf, rawKey) {
-        var parts = separateIvFromData(buf);
+    window["decryptAsync"] = async function (buf, rawKey, iv) {
 
         var key = await crypto.subtle.importKey(
             'raw'
@@ -75,11 +74,10 @@
             , false
             , ['decrypt', 'encrypt']
         );
-
         return new Uint8Array(await crypto.subtle.decrypt(
-            {name: 'AES-CBC', iv: parts.iv}
+            {name: 'AES-CBC', iv: iv}
             , key
-            , parts.data
+            , buf
         ));
     }
 </script>
