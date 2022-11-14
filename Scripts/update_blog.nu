@@ -65,7 +65,8 @@ def main [key_base64: string] {
 
     generate_outline $encrypted_files
 
-    git add --all
+    git add "*.md.encrypted"
+    git add "*/outline.json"
     git commit -m $"Blog Update (date format %Y-%m-%d)"
 }
 
