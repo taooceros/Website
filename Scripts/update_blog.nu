@@ -26,6 +26,22 @@ def generate_outline [files : list] {
     $outline | to json | save "wwwroot/Blogs/outline.json" --raw
 }
 
+def get_modified [] {
+    let files = $in
+    let cache_path = ".cache.json"
+    let cache = if ($cache_path | path exists) {open $cache_path} else {$files | each {|it| {name:$it val:""}} | transpose -rid}
+    let newcache = ($files | par-each {|it| {path: $it, hash:(open $it | hash md5)}} | transpose -rid)
+    $newcache | save $cache_path
+
+    let $modified = ($files | each while { |it| 
+        let $path = $it
+        let $hash = ($path | open | hash md5)
+        let $oldhash = ($cache | get $path)
+        if ($oldhash != $hash) { $path } else { null }
+        })
+    $modified
+}
+
 def main [key_base64: string] {
     let files = (ls wwwroot\Blogs\**\*.md | get name)
 
@@ -33,7 +49,9 @@ def main [key_base64: string] {
         
     let iv = (0..31 | each {"0"} | str join)
 
-    $files | par-each { |file|
+    let modified = ($files | get_modified)
+
+    $modified | par-each { |file|
        let content = (open $file)
        let enc_content = ($content 
                             | encode base64 
