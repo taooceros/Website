@@ -7,6 +7,8 @@
 @inject MarkdownPipeline MarkdownPipeline
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 
+<link rel="stylesheet" href="css/github-markdown.css"/>
+
 <PageTitle>Blog</PageTitle>
 
 <MudStack Row="true">
@@ -38,9 +40,9 @@
             }
             @if (post.DisplayFull)
             {
-                <MudText Style="word-wrap: break-word">
+                <div class="markdown-body">
                     @((MarkupString)Markdown.ToHtml(content, MarkdownPipeline))
-                </MudText>
+                </div>
             }
             else
             {
@@ -107,9 +109,9 @@
             var raw = await Http.GetStringAsync(link.FilePath);
             DisplayContent[0].Add(new Post(link.FilePath, link.FileName, raw));
         }
-        
+
         await UpdateDecryptedText();
-        
+
         await base.OnInitializedAsync();
 
     }
@@ -134,7 +136,7 @@
             var raw = await Http.GetStringAsync(link.FilePath);
             DisplayContent[i].Add(new Post(link.FilePath, link.FileName, raw));
         }
-        
+
         _page = page;
 
         await UpdateDecryptedText();

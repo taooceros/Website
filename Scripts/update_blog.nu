@@ -37,8 +37,7 @@ def get_modified [] {
     let $modified = ($files | each { |it| 
         let $path = $it
         let $hash = ($path | open | hash md5)
-        let $oldhash = ($cache | get $path)
-        if ($oldhash != $hash) { $path } else { null }
+        if ((not $path in $cache) || ($hash != ($cache | get $path))) { $path } else { null }
         })
     $modified
 }
@@ -67,6 +66,7 @@ def main [key_base64: string] {
 
     git add "*.md.encrypted"
     git add "*/outline.json"
-    git commit -m $"Blog Update (date format %Y-%m-%d)"
+    git commit -m $"Blog Update at (date now | date format %Y-%m-%d)"
+    git push
 }
 
