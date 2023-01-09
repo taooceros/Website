@@ -1,0 +1,16 @@
+﻿.typewriter {
+    animation: blink 1s step-start infinite;
+    border-right: .15em solid;
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+@-webkit-keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
