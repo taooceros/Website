@@ -21,6 +21,8 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 7.0.100-rc.1.22431.12
+    - name: Workload restore
+      run: dotnet workload restore
     - name: Publish with dotnet
       run: dotnet publish --configuration Release --output release
     # - name: Change base-tag in index.html from / to BlazorGitHubPagesDemo
