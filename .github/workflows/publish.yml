@@ -24,7 +24,7 @@ jobs:
     - name: Workload restore
       run: dotnet workload restore
     - name: Publish with dotnet
-      run: dotnet publish --configuration Release --output release
+      run: dotnet publish Website.csproj --configuration Release --output release
     # - name: Change base-tag in index.html from / to BlazorGitHubPagesDemo
     #   run: sed -i 's/<base href="\/" \/>/<base href="\/Website\/" \/>/g' release/wwwroot/index.html
     - name: Add .nojekyll file
