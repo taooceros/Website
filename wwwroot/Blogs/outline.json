@@ -4,5 +4,11 @@
         "filePath": "Posts",
         "title": "test",
         "description": "description"
+    },
+    {
+        "fileName": "test2.md",
+        "filePath": "Posts",
+        "title": "test2",
+        "description": "description"
     }
 ]

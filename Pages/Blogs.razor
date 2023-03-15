@@ -1,0 +1,40 @@
+@page "/blogs"
+@using Website.Models
+@using Website.Services
+
+@inject HttpClient Http
+@inject IBlogService BlogService
+@inject NavigationManager NavigationManager
+
+<MudGrid>
+    @foreach (var element in _blogs)
+    {
+        <MudItem>
+            <MudCard>
+                <MudCardContent>
+                    <MudText>@element.Title</MudText>
+                </MudCardContent>
+                @{
+                    void OpenArticle()
+                    {
+                        NavigationManager.NavigateTo($"/blog/{element.FilePath}/{element.FileName}");
+                    }
+                }
+                <MudCardActions>
+                    <MudButton OnClick="OpenArticle">Read More</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+   
+
+    private IEnumerable<BlogLink> _blogs = new List<BlogLink>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        _blogs = await BlogService.GetBlogPostsAsync();
+    }
+}

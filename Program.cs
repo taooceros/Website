@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Website;
 using MudBlazor.Services;
 using System.Net;
+using Website.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -23,5 +24,7 @@ builder.Services.AddScoped(_ => new HttpClient
     .AddScoped<IBlogService, BlogService>()
     .AddMudServices()
     .AddBlazoredLocalStorageAsSingleton();
+
+
 
 await builder.Build().RunAsync();

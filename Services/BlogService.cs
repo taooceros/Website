@@ -2,9 +2,11 @@ using System.Collections.Concurrent;
 using System.Net.Http.Json;
 using Website.Models;
 
+namespace Website.Services;
+
 public interface IBlogService
 {
-    Task<IEnumerable<BlogPost>> GetBlogPostsAsync();
+    Task<IEnumerable<BlogLink>> GetBlogPostsAsync();
 }
 
 public class BlogService : IBlogService
@@ -16,28 +18,11 @@ public class BlogService : IBlogService
         _httpClient = httpClient;
     }
 
-    public async Task<IEnumerable<BlogPost>> GetBlogPostsAsync()
+    public async Task<IEnumerable<BlogLink>> GetBlogPostsAsync()
     {
         var links = await _httpClient.GetFromJsonAsync<List<BlogLink>>("Blogs/outline.json");
 
-        if (links == null)
-        {
-            return new List<BlogPost>();
-        }
+        return links ?? new List<BlogLink>();
 
-        var blogPosts = new ConcurrentBag<BlogPost>();
-        await Parallel.ForEachAsync(links, async (link, token) =>
-        {
-            var content = await _httpClient.GetStringAsync(link.FilePath, token);
-            blogPosts.Add(new()
-            {
-                Title = link.Title,
-                Description = link.Description,
-                Content = content
-            });
-            return;
-        });
-
-        return blogPosts;
     }
 }

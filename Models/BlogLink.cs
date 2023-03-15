@@ -1,7 +1,4 @@
 namespace Website.Models;
 
 
-public record BlogLink(string FileName, string Title, string Description)
-{
-    public string FilePath => $"Blogs/Post/{FileName}";
-}
+public record BlogLink(string FileName, string FilePath, string Title, string Description);

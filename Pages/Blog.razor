@@ -1,24 +1,33 @@
-@page "/blog/{name?}"
-@using Website.Models
+﻿@page "/blog/{path}/{name}"
+@page "/blog"
+@using Markdig
 
-@inject HttpClient Http
-@inject IBlogService BlogService
+@inject HttpClient Client
+@inject MarkdownPipeline MarkdownPipeline
 
-<MudGrid>
-    @foreach (var element in blogs)
-    {
+<MudPaper Class="ma-16">
+    <div class="markdown-body; ma-16">
+        @MarkdownContent
+    </div>
+</MudPaper>
 
-    }
-</MudGrid>
 
 @code {
     [Parameter]
+    public string? Path { get; set; }
+    
+    [Parameter]
     public string? Name { get; set; }
 
-    private IEnumerable<BlogPost> blogs;
+    private string Content { get; set; } = "";
 
-    protected override async Task OnInitializedAsync()
+    private MarkupString MarkdownContent { get; set; }
+
+    protected async override Task OnParametersSetAsync()
     {
-        blogs = await BlogService.GetBlogPostsAsync();
+        await base.OnInitializedAsync();
+        Content = await Client.GetStringAsync($"Blogs/{Path}/{Name}");
+        MarkdownContent = (MarkupString)Markdown.ToHtml(Content, MarkdownPipeline);
+        StateHasChanged();
     }
 }
