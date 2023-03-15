@@ -33,7 +33,7 @@ public static class ThemeSpecification
             Secondary = "#b1ccc5",
             Tertiary = "#abcae5",
             Error = "#ffb4ab",
-            Surface = "#005046",
+            Surface = "#3f4946",
             Background = "#191c1b",
             TextPrimary = "#e0e3e1",
             AppbarText = "#00372f",
