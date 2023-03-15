@@ -6,6 +6,7 @@
 @inject IJSRuntime JsRuntime
 @inject MarkdownPipeline MarkdownPipeline
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject IDiaryService DiaryService
 
 
 <link href="css/github-markdown.css" rel="stylesheet" />
@@ -61,7 +62,7 @@
     List<DiaryLink> Links { get; set; } = new();
     private WindowDimension Dimension { get; set; } = null!;
 
-    private List<Post>[] DisplayContent { get; set; } = { new() };
+    private List<DiaryPost>[] DisplayContent { get; set; } = { new() };
 
     private bool[] PageInitialized { get; set; } = Array.Empty<bool>();
 
@@ -81,27 +82,24 @@
 
         Dimension = await JsRuntime.InvokeAsync<WindowDimension>("getWindowDimensions");
 
-        Links = await Http.GetFromJsonAsync<List<DiaryLink>>("Diarys/outline.json") ?? new List<DiaryLink>();
+        Links = await DiaryService.GetDiaryLinksAsync();
 
         _numberOfPages = (int)Math.Ceiling((double)Links.Count / MaxPostPerPage);
 
-        DisplayContent = new List<Post>[_numberOfPages];
+        DisplayContent = new List<DiaryPost>[_numberOfPages];
         PageInitialized = new bool[_numberOfPages];
 
         Links.Sort((x, y) => -string.Compare(x.FilePath, y.FilePath, StringComparison.Ordinal));
 
         for (var i = 0; i < DisplayContent.Length; i++)
         {
-            DisplayContent[i] = new List<Post>();
+            DisplayContent[i] = new List<DiaryPost>();
         }
 
         PageInitialized[0] = true;
 
-        foreach (var link in Links.Take(MaxPostPerPage))
-        {
-            var raw = await Http.GetStringAsync(link.FilePath);
-            DisplayContent[0].Add(new Post(link.FilePath, link.FileName, raw));
-        }
+
+        DisplayContent[0] = (await DiaryService.LoadDiaryAsync(Links.Take(MaxPostPerPage))).OrderByDescending(x => x.FilePath).ToList();
 
         await UpdateDecryptedText();
 
@@ -123,12 +121,7 @@
         }
         PageInitialized[i] = true;
 
-        DisplayContent[i] = new List<Post>();
-        foreach (var link in Links.Skip(MaxPostPerPage * i).Take(MaxPostPerPage))
-        {
-            var raw = await Http.GetStringAsync(link.FilePath);
-            DisplayContent[i].Add(new Post(link.FilePath, link.FileName, raw));
-        }
+        DisplayContent[i] = (await DiaryService.LoadDiaryAsync(Links.Skip(i * MaxPostPerPage).Take(MaxPostPerPage))).OrderByDescending(x => x.FilePath).ToList();
 
         _page = page;
 

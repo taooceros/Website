@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Net.Http.Json;
 using Website.Models;
 
@@ -17,17 +18,17 @@ public class BlogService : IBlogService
 
     public async Task<IEnumerable<BlogPost>> GetBlogPostsAsync()
     {
-        var links = await _httpClient.GetFromJsonAsync<List<BlogLink>>("api/blogposts");
+        var links = await _httpClient.GetFromJsonAsync<List<BlogLink>>("Blogs/outline.json");
 
         if (links == null)
         {
             return new List<BlogPost>();
         }
 
-        var blogPosts = new List<BlogPost>();
+        var blogPosts = new ConcurrentBag<BlogPost>();
         await Parallel.ForEachAsync(links, async (link, token) =>
         {
-            var content = await _httpClient.GetStringAsync(link.FilePath);
+            var content = await _httpClient.GetStringAsync(link.FilePath, token);
             blogPosts.Add(new()
             {
                 Title = link.Title,

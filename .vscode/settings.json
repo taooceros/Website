@@ -1,0 +1,42 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/**/Blogs/outline.json"
+            ],
+            "schema": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": [
+                        "fileName",
+                        "filePath",
+                        "title",
+                        "description"
+                    ],
+                    "default": {
+                        "fileName": "file-name",
+                        "filePath": "",
+                        "title": "title",
+                        "description": "description"
+                    },
+                    "properties": {
+                        "fileName": {
+                            "type": "string",
+                        },
+                        "filePath": {
+                            "type": "string",
+                            "defaultSnippets": "Blogs/$0.md"
+                        },
+                        "title": {
+                            "type": "string"
+                        },
+                        "description": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

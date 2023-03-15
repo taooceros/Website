@@ -1,9 +1,11 @@
 @page "/blog/{name?}"
 @using Website.Models
 
+@inject HttpClient Http
+@inject IBlogService BlogService
 
 <MudGrid>
-    @foreach (var element in collection)
+    @foreach (var element in blogs)
     {
 
     }
@@ -13,9 +15,10 @@
     [Parameter]
     public string? Name { get; set; }
 
-    private IEnumerable<BlogPost> collection;
+    private IEnumerable<BlogPost> blogs;
 
     protected override async Task OnInitializedAsync()
     {
+        blogs = await BlogService.GetBlogPostsAsync();
     }
 }
