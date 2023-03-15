@@ -1,0 +1,21 @@
+@page "/blog/{name?}"
+@using Website.Models
+
+
+<MudGrid>
+    @foreach (var element in collection)
+    {
+
+    }
+</MudGrid>
+
+@code {
+    [Parameter]
+    public string? Name { get; set; }
+
+    private IEnumerable<BlogPost> collection;
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+}

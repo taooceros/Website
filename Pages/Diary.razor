@@ -1,4 +1,4 @@
-﻿@page "/dairy"
+﻿@page "/Diary"
 @using Website.Models
 @using Markdig
 @using Website.Utility
@@ -10,7 +10,7 @@
 
 <link href="css/github-markdown.css" rel="stylesheet" />
 
-<PageTitle>Dairy</PageTitle>
+<PageTitle>Diary</PageTitle>
 
 <MudStack Row="true">
     <MudTextField FullWidth="true" InputType="InputType.Password" Label="Key" T="string" Text="@EncryptionKey"
@@ -58,7 +58,7 @@
 }
 
 @code {
-    List<MarkdownLink> Links { get; set; } = new();
+    List<DiaryLink> Links { get; set; } = new();
     private WindowDimension Dimension { get; set; } = null!;
 
     private List<Post>[] DisplayContent { get; set; } = { new() };
@@ -81,7 +81,7 @@
 
         Dimension = await JsRuntime.InvokeAsync<WindowDimension>("getWindowDimensions");
 
-        Links = await Http.GetFromJsonAsync<List<MarkdownLink>>("Dairys/outline.json") ?? new List<MarkdownLink>();
+        Links = await Http.GetFromJsonAsync<List<DiaryLink>>("Diarys/outline.json") ?? new List<DiaryLink>();
 
         _numberOfPages = (int)Math.Ceiling((double)Links.Count / MaxPostPerPage);
 
