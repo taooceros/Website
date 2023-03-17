@@ -1,5 +1,5 @@
 ﻿bin/
-*.md
+wwwroot/Diarys/**/*.md
 .idea/
 .vs/
 obj/

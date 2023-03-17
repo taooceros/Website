@@ -12,19 +12,17 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(_ => new HttpClient
-{
-    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress),
-    DefaultRequestVersion = HttpVersion.Version20,
-    DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrLower
-}).AddSingleton(_ => new MarkdownPipelineBuilder()
-    .UseTaskLists()
-    .UseEmphasisExtras()
-    .Build())
+    {
+        BaseAddress = new Uri(builder.HostEnvironment.BaseAddress),
+        DefaultRequestVersion = HttpVersion.Version20,
+        DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrLower
+    }).AddSingleton(_ => new MarkdownPipelineBuilder()
+        .UseTaskLists()
+        .UseEmphasisExtras()
+        .Build())
     .AddScoped<IDiaryService, DiaryService>()
     .AddScoped<IBlogService, BlogService>()
     .AddMudServices()
     .AddBlazoredLocalStorageAsSingleton();
-
-
 
 await builder.Build().RunAsync();

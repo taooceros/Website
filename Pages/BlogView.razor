@@ -1,21 +1,18 @@
-﻿@page "/blog/{path}/{name}"
-@page "/blog"
+﻿@page "/Blogs/{path}/{name}/view"
 @using Markdig
 
 @inject HttpClient Client
 @inject MarkdownPipeline MarkdownPipeline
 
-<MudPaper Class="ma-16">
-    <div class="markdown-body; ma-16">
-        @MarkdownContent
-    </div>
-</MudPaper>
+<div class="ma-16 markdown-body;">
+    @MarkdownContent
+</div>
 
 
 @code {
     [Parameter]
     public string? Path { get; set; }
-    
+
     [Parameter]
     public string? Name { get; set; }
 
