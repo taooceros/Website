@@ -20,7 +20,7 @@ builder.Services.AddScoped(_ => new HttpClient
         .UseTaskLists()
         .UseEmphasisExtras()
         .Build())
-    .AddScoped<IDiaryService, DiaryService>()
+    .AddScoped<IDiarieservice, Diarieservice>()
     .AddScoped<IBlogService, BlogService>()
     .AddMudServices()
     .AddBlazoredLocalStorageAsSingleton();

@@ -23,7 +23,7 @@ def generate_outline [files : list] {
             let $filename = ($file | path basename)
             {FileName : $filename, FilePath: $file}
         })
-    $outline | to json | save "wwwroot/Diarys/outline.json" --raw
+    $outline | to json | save "wwwroot/Diaries/outline.json" --raw
 }
 
 def get_modified [] {
@@ -43,7 +43,7 @@ def get_modified [] {
 }
 
 def main [key_base64: string] {
-    let files = (ls wwwroot\Diarys\**\*.md | get name)
+    let files = (ls wwwroot\Diaries\**\*.md | get name)
 
     let key_str = ($key_base64 | base64_tohex)
         
@@ -60,7 +60,7 @@ def main [key_base64: string] {
                             | openssl enc -e -aes-256-cbc -K $key_str -iv $iv -a -out $"($file).encrypted")
     }
 
-    let encrypted_files = (ls wwwroot\Diarys\**\*.md.encrypted | get name)
+    let encrypted_files = (ls wwwroot\Diaries\**\*.md.encrypted | get name)
 
     generate_outline $encrypted_files
 

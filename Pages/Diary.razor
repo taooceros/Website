@@ -6,7 +6,7 @@
 @inject IJSRuntime JsRuntime
 @inject MarkdownPipeline MarkdownPipeline
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
-@inject IDiaryService DiaryService
+@inject IDiarieservice Diarieservice
 
 
 <link href="css/github-markdown.css" rel="stylesheet" />
@@ -82,7 +82,7 @@
 
         Dimension = await JsRuntime.InvokeAsync<WindowDimension>("getWindowDimensions");
 
-        Links = await DiaryService.GetDiaryLinksAsync();
+        Links = await Diarieservice.GetDiaryLinksAsync();
 
         _numberOfPages = (int)Math.Ceiling((double)Links.Count / MaxPostPerPage);
 
@@ -99,7 +99,7 @@
         PageInitialized[0] = true;
 
 
-        DisplayContent[0] = (await DiaryService.LoadDiaryAsync(Links.Take(MaxPostPerPage))).OrderByDescending(x => x.FilePath).ToList();
+        DisplayContent[0] = (await Diarieservice.LoadDiaryAsync(Links.Take(MaxPostPerPage))).OrderByDescending(x => x.FilePath).ToList();
 
         await UpdateDecryptedText();
 
@@ -121,7 +121,7 @@
         }
         PageInitialized[i] = true;
 
-        DisplayContent[i] = (await DiaryService.LoadDiaryAsync(Links.Skip(i * MaxPostPerPage).Take(MaxPostPerPage))).OrderByDescending(x => x.FilePath).ToList();
+        DisplayContent[i] = (await Diarieservice.LoadDiaryAsync(Links.Skip(i * MaxPostPerPage).Take(MaxPostPerPage))).OrderByDescending(x => x.FilePath).ToList();
 
         _page = page;
 

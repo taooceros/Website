@@ -2,25 +2,25 @@ using System.Collections.Concurrent;
 using System.Net.Http.Json;
 using Website.Models;
 
-public interface IDiaryService
+public interface IDiarieservice
 {
     Task<List<DiaryLink>> GetDiaryLinksAsync();
 
     Task<IEnumerable<DiaryPost>> LoadDiaryAsync(IEnumerable<DiaryLink> links);
 }
 
-public class DiaryService : IDiaryService
+public class Diarieservice : IDiarieservice
 {
     private readonly HttpClient _httpClient;
 
-    public DiaryService(HttpClient httpClient)
+    public Diarieservice(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
 
     public async Task<List<DiaryLink>> GetDiaryLinksAsync()
     {
-        var links = await _httpClient.GetFromJsonAsync<List<DiaryLink>>("Diarys/outline.json");
+        var links = await _httpClient.GetFromJsonAsync<List<DiaryLink>>("Diaries/outline.json");
         return links ?? new List<DiaryLink>();
     }
 
