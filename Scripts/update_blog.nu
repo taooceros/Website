@@ -2,7 +2,7 @@ def base64_tohex [] {
     let $base64_string = $in
     let binary = ($base64_string | decode base64 --binary)
     ($"($binary)" 
-        | str substring [1,-1] 
+        | str substring 2..-1
         | split row "," 
         | each {|it| 
             ($it 
@@ -10,8 +10,8 @@ def base64_tohex [] {
             | fmt 
             | get upperhex 
             | into string 
-            | str substring "2," 
-            | str lpad -l 2 -c '0')
+            | str substring 2..
+            | fill -a left -w 2 -c '0')
           }
         | str join)
 }
@@ -23,7 +23,7 @@ def generate_outline [files : list] {
             let $filename = ($file | path basename)
             {FileName : $filename, FilePath: $file}
         })
-    $outline | to json | save "wwwroot/Diaries/outline.json" --raw
+    $outline | to json | save "wwwroot/Diaries/outline.json" --raw -f
 }
 
 def get_modified [] {
@@ -31,13 +31,13 @@ def get_modified [] {
     let cache_path = ".cache.json"
     let cache = if ($cache_path | path exists) {open $cache_path} else {$files | each {|it| {name:$it val:""}} | transpose -rid}
     let newcache = ($files | par-each {|it| {path: $it, hash:(open $it | hash md5)}} | transpose -rid)
-    $newcache | save $cache_path
+    $newcache | save $cache_path -f
 
 
     let $modified = ($files | each { |it| 
         let $path = $it
         let $hash = ($path | open | hash md5)
-        if ((not $path in $cache) || ($hash != ($cache | get $path))) { $path } else { null }
+        if ((not $path in $cache) or ($hash != ($cache | get $path))) { $path } else { null }
         })
     $modified
 }
@@ -57,7 +57,7 @@ def main [key_base64: string] {
        let content = (open $file)
        let enc_content = ($content 
                             | encode base64 
-                            | openssl enc -e -aes-256-cbc -K $key_str -iv $iv -a -out $"($file).encrypted")
+                            | ^'C:\Program Files\Git\mingw64\bin\openssl.exe' enc -e -aes-256-cbc -K $key_str -iv $iv -a -out $"($file).encrypted")
     }
 
     let encrypted_files = (ls wwwroot\Diaries\**\*.md.encrypted | get name)
