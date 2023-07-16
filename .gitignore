@@ -3,6 +3,7 @@ wwwroot/Diaries/**/*.md
 .idea/
 .vs/
 obj/
-Scripts/newblog.nu
+Scripts/new_diary.nu
+Scripts/new_dairy.nu
 .fake
 .cache.json

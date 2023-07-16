@@ -1,19 +1,6 @@
 def base64_tohex [] {
     let $base64_string = $in
-    let binary = ($base64_string | decode base64 --binary)
-    ($"($binary)" 
-        | str substring 2..-1
-        | split row "," 
-        | each {|it| 
-            ($it 
-            | into int 
-            | fmt 
-            | get upperhex 
-            | into string 
-            | str substring 2..
-            | fill -a left -w 2 -c '0')
-          }
-        | str join)
+    ($base64_string | decode base64 --binary | encode hex)
 }
 
 def generate_outline [files : list] {
