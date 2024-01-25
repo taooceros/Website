@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
 <MudThemeProvider @ref="@ThemeSpecification.Provider" @bind-IsDarkMode="@ThemeSpecification.DarkMode"/>
@@ -6,14 +7,21 @@
 <MudSnackbarProvider/>
 <div>
     <MudLayout>
-        <MudAppBar Color="Color.Transparent" 
+        <MudAppBar Color="Color.Transparent"
                    Elevation="0"
                    Class="app-bar-shadow"
                    Style="backdrop-filter: blur(5px);mask: linear-gradient(to top, transparent, black 35%);">
             <MudIconButton Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle"
                            Icon="@Icons.Material.Filled.Menu" Class="ml-1"/>
             <MudSpacer/>
-            <MudBreadcrumbs Items="_items"/>
+
+
+            @if (NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Split("#")[0] == "")
+            {
+                <MudBreadcrumbs Items="_items"/>
+            }
+
+
             <MudSpacer/>
 
             <MudToggleIconButton @bind-Toggled="@ThemeSpecification.DarkMode"
@@ -47,6 +55,7 @@
             StateHasChanged();
         }
     }
+
 
     private readonly List<BreadcrumbItem> _items =
     [
