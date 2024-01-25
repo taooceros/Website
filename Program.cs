@@ -14,7 +14,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(_ => new HttpClient
     {
         BaseAddress = new Uri(builder.HostEnvironment.BaseAddress),
-        DefaultRequestVersion = HttpVersion.Version20,
+        DefaultRequestVersion = HttpVersion.Version30,
         DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrLower
     }).AddSingleton(_ => new MarkdownPipelineBuilder()
         .UseTaskLists()
