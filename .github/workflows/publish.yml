@@ -23,6 +23,8 @@ jobs:
         dotnet-version: 8.0.*
     - name: Workload restore
       run: dotnet workload restore
+    - name: Install WASM Workload
+      run: dotnet workload install wasm-tools
     - name: Publish with dotnet
       run: dotnet publish Website.csproj --configuration Release --output release
     # - name: Change base-tag in index.html from / to BlazorGitHubPagesDemo
