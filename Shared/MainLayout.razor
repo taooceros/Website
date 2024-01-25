@@ -6,7 +6,10 @@
 <MudSnackbarProvider/>
 <div>
     <MudLayout>
-        <MudAppBar Color="Color.Transparent" Elevation="0" Class="app-bar-shadow">
+        <MudAppBar Color="Color.Transparent" 
+                   Elevation="0"
+                   Class="app-bar-shadow"
+                   Style="backdrop-filter: blur(5px);mask: linear-gradient(to top, transparent, black 35%);">
             <MudIconButton Color="Color.Inherit" Edge="Edge.Start" OnClick="@DrawerToggle"
                            Icon="@Icons.Material.Filled.Menu" Class="ml-1"/>
             <MudSpacer/>

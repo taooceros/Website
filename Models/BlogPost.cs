@@ -1,10 +1,3 @@
 namespace Website.Models;
 
-public class BlogPost
-{
-    public string Title { get; set; }
-
-    public string Description { get; set; }
-
-    public string Content { get; set; }
-}
+public record BlogPost(string Title, string Description, string Content);
