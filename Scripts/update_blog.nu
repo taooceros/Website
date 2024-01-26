@@ -1,7 +1,14 @@
-def base64_tohex [] {
-    let $base64_string = $in
-    ($base64_string | decode base64 --binary | encode hex)
-}
+# def base64_tohex [] {
+#     let $base64_string = $in
+#     let $binary_rep = ($base64_string | decode base64 --binary)
+
+#     (0..(($binary_rep | bytes length) - 1)) | 
+#         each { |$i|
+#             let $byte = ($binary_rep | bytes at $i..($i + 1))
+#             let $hex = ($byte | format "%02x")
+#             $hex
+#         }
+# }
 
 def generate_outline [files : list] {
     let $files = $files
@@ -29,10 +36,10 @@ def get_modified [] {
     $modified
 }
 
-def main [key_base64: string] {
+def main [key: string] {
     let files = (ls wwwroot\Diaries\**\*.md | get name)
 
-    let key_str = ($key_base64 | base64_tohex)
+    let key_str = ($key)
         
     let iv = (0..31 | each {"0"} | str join)
 
