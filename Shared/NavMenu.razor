@@ -1,18 +1,26 @@
-﻿<MudNavMenu Color="Color.Surface" Elevation="2">
+﻿<MudNavMenu Rounded="true" Margin="Margin.Normal"
+            Class="pa-5">
+    <MudHidden Breakpoint="Breakpoint.MdAndUp">
+        <MudText Typo="Typo.h6" Class="ps-5 pb-2">Menu</MudText>
+        <MudDivider Class="pa-2"/>
+    </MudHidden>
     <MudNavLink Href=""
-        Icon="@Icons.Material.Filled.Home"
-        IconColor="Color.Surface"
-        Match="NavLinkMatch.All">
-        Home
+                Icon="@Icons.Material.Filled.Home"
+                Match="NavLinkMatch.All">
+        <MudText Align="Align.Left">
+            Home
+        </MudText>
     </MudNavLink>
     <MudNavLink Href="blogs"
-        Icon="@Icons.Material.Filled.Article"
-        IconColor="Color.Surface">
-        Blog
+                Icon="@Icons.Material.Filled.Article">
+        <MudText Align="Align.Left">
+            Blog
+        </MudText>
     </MudNavLink>
     <MudNavLink Href="Diary"
-        Icon="@Icons.Material.Filled.Feed"
-        IconColor="Color.Surface">
-        Diary
+                Icon="@Icons.Material.Filled.Feed">
+        <MudText Align="Align.Left">
+            Diary
+        </MudText>
     </MudNavLink>
 </MudNavMenu>

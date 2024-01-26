@@ -3,39 +3,114 @@
 
 <PageTitle>Hongtao Zhang</PageTitle>
 
-<MudText Typo="Typo.h3">
-    <Typewriter Builder="@_builder" />
-    <a href="https://www.flowlauncher.com/">
-        <AnimationState Delay="12000" AnimationType="fade-in">
-            <MudImage Src="https://www.flowlauncher.com/public/images/titlelogo.png" style="margin:auto" />
-        </AnimationState>
-    </a>
+<a id="top" style="padding-top: 20px">
+    <MudText Typo="Typo.h3" Style="font-family: 'Roboto Mono', Roboto, sans-serif" Class="mb-5">
+        Hello, I am Hongtao!
+    </MudText>
+</a>
+
+
+<MudDivider/>
+
+<MudText Typo="Typo.body1" Class="my-5" Style="line-height: 1.5;">
+    I am a student in UW-Madison's Class 2024.5 (yes because of COVID), majoring in Honors Computer Science,
+    Mathematics, and Data Science.
+    I have vast interest in various aspects of computer science, including but not limit to Computer Systems,
+    Concurrent Data Structure, and Machine Learning.
+
+    <br/>
+    <br/>
+
+    Beyond course work, I am into building Open Source Programs. Specifically, I am a member of
+    <MudLink Href="https://www.flowlauncher.com/" Color="Color.Info" Target="_blank">
+        Flow Launcher
+    </MudLink>,
+    in which we have awarded more than 5,000 stars on GitHub and 100,000 downloads on GitHub.
 </MudText>
 
-<AnimationState AnimationTime="5s" AnimationType="fade-in" Delay="13000" IsShown="true">
+<a id="research_interest" href="#research_interest">
+    <MudText Typo="Typo.h4" Class="my-5">
+        Research Interest
+    </MudText>
+</a>
 
-</AnimationState>
+<MudText>
+    I have broad interest in Concurrent Data Structure and Synchronization, Operating System and Machine Learning (Reinforcement Learning).
 
-<MudAppBar Bottom="true" Color="Color.Transparent" Elevation="0">
+    <br/>
+
+    In particularly I am currently working with
+    <MudLink Href="https://pages.cs.wisc.edu/~remzi/" Target="_blank">Remzi Arpaci-Dusseau</MudLink>
+    to align delegation-style locks to the principle of usage-fairness.
+</MudText>
+
+<a id="projects" href="#projects">
+    <MudText Typo="Typo.h4" Class="my-5">
+        Projects
+    </MudText>
+</a>
+
+<MudPaper Class="d-flex flex-wrap" Elevation="0">
+    <MudPaper Width="450px">
+        <MudCard Class="pa-3">
+            <MudCardMedia Image="https://www.flowlauncher.com/public/images/light_screenshot.png" Class="pa-5" Height="250"/>
+            <MudCardContent>
+                <MudText Typo="Typo.h5">
+                    Flow.Launcher
+                    <object alt="Flow Launcher stars" data="https://img.shields.io/github/stars/Flow-Launcher/Flow.Launcher?link=https%3A%2F%2Fgithub.com%2FFlow-Launcher%2FFlow.Launcher&link=https%3A%2F%2Fgithub.com%2FFlow-Launcher%2FFlow.Launcher%2Fstargazers">
+                    </object>
+                </MudText>
+                <MudText Typo="Typo.body2">Quick File Search & App Launcher for Windows <br/><br/></MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="https://www.flowlauncher.com/">Learn More</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudPaper>
+</MudPaper>
+
+<a id="awards" href="#awards">
+    <MudText Typo="Typo.h4" Class="mt-5">
+        Awards
+    </MudText>
+</a>
+
+<MudList Clickable="false">
+    <MudListItem Icon="@Icons.Material.Filled.Bookmark" IconColor="Color.Secondary">
+        The David Dewitt Undergraduate Scholarship, Computer Science Department, UW–Madison, 2023
+    </MudListItem>
+</MudList>
+
+
+<a id="old_projects" href="#old_projects">
+    <MudText Typo="Typo.h4" Class="my-5">
+        Old Projects
+    </MudText>
+</a>
+
+<MudText>Something I built but no long maintained</MudText>
+
+<MudPaper Class="d-flex flex-wrap" Elevation="0">
+    <MudPaper Width="450px">
+        <MudCard Class="pa-3">
+            <MudCardMedia Image="Assets/vmawalk_demonstration.png" Height="250"></MudCardMedia>
+            <MudCardContent>
+                <MudText Typo="Typo.h5">VMAWalk</MudText>
+                <MudText Typo="Typo.body2">A website to recommend classes and instructors for my high school Vanke Meisha Academy</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Text" Color="Color.Primary" Href="https://vmawalk.vercel.app/">Learn More</MudButton>
+            </MudCardActions>
+        </MudCard>
+    </MudPaper>
+</MudPaper>
+
+
+<MudAppBar Bottom="true" Color="Color.Transparent" Elevation="0" Fixed="false">
     <MudStack AlignItems="AlignItems.Center" Class="flex-grow-1" Justify="Justify.Center" Row="true" Spacing="2">
-        <MudIcon Icon="@Icons.Outlined.Label" Style="margin: 15px" />
-        Power by .Net 7 Blazor and MudBlazor
-        <MudIconButton Color="Color.Inherit" Icon="@Icons.Custom.Brands.MudBlazor" Link="https://mudblazor.com/"
-            Style="margin:0" Target="_blank" />
+        <MudIcon Icon="@Icons.Material.Outlined.Label" Style="margin: 15px"/>
+        Power by .Net 8 Blazor and MudBlazor
+        <MudIconButton Color="Color.Inherit" Icon="@Icons.Custom.Brands.MudBlazor" Href="https://mudblazor.com/"
+                       Style="margin:0" Target="_blank"/>
     </MudStack>
 </MudAppBar>
-
-
-@code {
-    readonly TypewriterBuilder _builder = new TypewriterBuilder(defaultCharacterPause: 50)
-        .TypeString("Hello, There!")
-        .Pause(1000)
-        .DeleteAll()
-        .TypeString("Here's Hongtao (Kevin) Zhang!")
-        .Pause(2000)
-        .DeleteAll()
-        .TypeString("Welcome to my website!\n")
-        .Pause(300)
-        .TypeString("I am also a maintainer of Flow Launcher, Check it out?");
-
-}
