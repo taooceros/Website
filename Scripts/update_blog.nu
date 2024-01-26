@@ -60,7 +60,7 @@ def main [key: string] {
 
     git add "*.md.encrypted"
     git add "*/outline.json"
-    git commit -m $"Diary Update at (date now | date format %Y-%m-%d)"
+    git commit -m $"Diary Update at (date now | format date %Y-%m-%d)"
     git push
 }
 
