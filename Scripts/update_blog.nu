@@ -31,7 +31,7 @@ def get_modified [] {
     let $modified = ($files | each { |it| 
         let $path = $it
         let $hash = ($path | open | hash md5)
-        if ((not $path in $cache) or ($hash != ($cache | get $path))) { $path } else { null }
+        if ((not ($path in $cache)) or ($hash != ($cache | get $path))) { $path } else { null }
         })
     $modified
 }
