@@ -24,7 +24,8 @@
 
             <MudSpacer/>
 
-            <MudToggleIconButton @bind-Toggled="@ThemeSpecification.DarkMode"
+            <MudToggleIconButton ToggledChanged="ThemeChanged"
+                                 Toggled="_darkMode"
                                  Color="Color.Inherit" Icon="@Icons.Material.Filled.LightMode" ToggledColor="Color.Inherit"
                                  ToggledIcon="@Icons.Material.Filled.DarkMode"/>
             <MudIconButton Color="Color.Inherit" Icon="@Icons.Custom.Brands.GitHub" Href="https://github.com/taooceros/"
@@ -46,11 +47,14 @@
 
 @code
 {
+    bool _darkMode = false;
+    
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await ThemeSpecification.DetectSystemTheme();
+            _darkMode = ThemeSpecification.DarkMode;
             await JSRuntime.InvokeVoidAsync("toggleTheme", ThemeSpecification.DarkMode);
             StateHasChanged();
         }
@@ -70,5 +74,12 @@
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    private void ThemeChanged(bool obj)
+    {
+        _darkMode = obj;
+        ThemeSpecification.DarkMode = obj;
+        JSRuntime.InvokeVoidAsync("toggleTheme", obj);
     }
 }
